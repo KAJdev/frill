@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: mongo:latest
+    volumes:
+      - frill-db-data:/data/db
+    networks:
+      - frill-net
+    ports:
+      - 27017:27017
+
+  redis:
+    image: redis:latest
+    volumes:
+      - frill-redis-data:/data
+    networks:
+      - frill-net
+    ports:
+      - 6379:6379
+
+  bot:
+    build:
+      context: bot
+      dockerfile: Dockerfile
+    image: frill-bot:latest
+    networks:
+      - frill-net
+    depends_on:
+      - executor
+      - redis
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - OPENAI_TOKEN=${OPENAI_TOKEN}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - EXECUTOR_HOST=executor
+      - EXECUTOR_PORT=8000
+      - PYTHONUNBUFFERED=1
+
+  executor:
+    build:
+      context: executor
+      dockerfile: Dockerfile
+    image: frill-executor:latest
+    networks:
+      - frill-net
+    depends_on:
+      - db
+      - redis
+    environment:
+      - MONGODB_HOST=db
+      - MONGODB_PORT=27017
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DATABASE_NAME=frill
+      - PORT=8000
+      - PYTHONUNBUFFERED=1
+    ports:
+      - 8000:8000
+
+volumes:
+  frill-db-data:
+  frill-redis-data:
+
+
+networks:
+  frill-net:

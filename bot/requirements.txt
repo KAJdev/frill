@@ -1,0 +1,4 @@
+discord-py-interactions
+aiohttp
+toml
+redis>=4.2.0rc1
