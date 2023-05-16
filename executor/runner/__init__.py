@@ -82,8 +82,12 @@ class Runner:
 
         if a key is not found, it will be replaced with None
         """
-        for key, value in self.env.items():
-            string = string.replace(f"${{{key}}}", value)
+        print(f"Template string: {string}")
+        try:
+            for key, value in self.env.items():
+                string = string.replace(f"${{{key}}}", value)
+        except:
+            pass
 
         return string
 

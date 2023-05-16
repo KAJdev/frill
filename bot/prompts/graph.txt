@@ -9,7 +9,7 @@ description = { type = "string", required = true } # describe the purpose of the
 
 # Action graph schema
 [[actions]]
-type = "prompt" # sends a message to the user with the provided content and waits for a possible response
+type = "prompt" # sends a message to the user on Discord with the provided content and waits for a possible response
 label = { type = "string", required = false } # optional unique label for gotos
 content = { type = "string", required = true } # content of the message to be sent to the user
 image = { type = "string", required = false} # optional image search term
@@ -52,7 +52,7 @@ output = { type = "string", required = true } # The global variable name to save
 goto = { type = "string", required = false } # optional label to "jump" to after execution
 
 [[actions]]
-type = "http" # will make a raw HTTP request
+type = "http" # will make a raw HTTP request IMPORTANT: avoid using requests that require an API key.
 label = { type = "string", required = false } # optional unique label for gotos
 url = { type = "string", required = true } # URL to fetch
 method = { type = "string", required = true } # GET/POST/PATCH/DELETE/etc.
@@ -62,7 +62,7 @@ output = { type = "string", required = true } # The global variable name to save
 goto = { type = "string", required = false } # optional label to "jump" to after execution
 
 # Chaining actions
-# Actions can be chained. Actions will run in the order they are defined unless a `goto` field is specified. Consider using goto whenever you find yourself looping logic.
+# Actions can be chained. Actions will run in the order they are defined unless a `goto` field is specified. Consider using goto whenever you find yourself looping logic, though if its a periodic job, use cron.
 
 # Variables
 # Global variables can be used via the ${VARIABLE_NAME} syntax in any string field of any action. Using a variable that is undefined will yield the string "None". Action types that provide the `output` field will store their output in the variable you provide. Outputs will not be utilized unless they are referenced in an action (so you must send a message for outputs to be seen). Variables are persistent and can hold large amounts of data between cron invocations.

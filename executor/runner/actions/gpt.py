@@ -23,8 +23,12 @@ class Gpt(Action):
                         "messages": [
                             {
                                 "role": "system",
+                                "content": "You are an assistant to a computer system (user). Complete the task given by the user without providing extra details.",
+                            },
+                            {
+                                "role": "user",
                                 "content": runner.template_string(self.prompt),
-                            }
+                            },
                         ],
                     },
                 ) as response:

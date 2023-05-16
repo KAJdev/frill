@@ -44,6 +44,7 @@ async def text(
                     ],
                     "temperature": temperature,
                     "user": f"{user}" if user else None,
+                    "max_tokens": 2048,
                 },
             ) as response:
                 json = await response.json()
