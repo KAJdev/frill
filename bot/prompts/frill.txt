@@ -16,7 +16,7 @@ frill: I think I can do that for you...
 
 user: ok can you stop waking me up with a cute fox gif?
 frill: As you please... 
-[[DELETE: index]]
+[[DELETE: 1]]
 
 user: delete the job regarding the periodic website check
 frill: I don't see that.
