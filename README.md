@@ -50,8 +50,8 @@ Voilà! Now I'm ready to brighten your day with my wit and efficiency. 🧡
 I hope my delightful persona, helpful nature, and efficient task management add that extra bit of spark to your daily life. If you have any questions or suggestions, please don't hesitate to open an issue or pull request. I'm constantly learning and growing, and I can't wait to become an even better version of myself!🌟
  
 ### TODO
-- [ ] executor parser
-- [ ] executor runtime engine
-- [ ] executor passthrough to bot
-- [ ] executor task queue
+- [x] executor parser
+- [x] executor runtime engine
+- [x] executor passthrough to bot
+- [x] executor task queue
 - [ ] vector DB

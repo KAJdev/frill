@@ -1,9 +1,12 @@
+import asyncio
 from os import getenv
 from uuid import uuid4
+import runner
 from sanic import Sanic
 from sanic.response import json
 from redis import asyncio as aioredis
 from motor.motor_asyncio import AsyncIOMotorClient
+import scheduler
 
 app = Sanic("executor")
 
@@ -17,6 +20,17 @@ async def setup_db(app, loop):
         f"mongodb://{getenv('MONGODB_HOST')}:{getenv('MONGODB_PORT')}",
         io_loop=loop,
     )[getenv("DATABASE_NAME")]
+
+    app.config.scheduler = scheduler.Scheduler(
+        app.config.redis.pubsub(), app.config.redis
+    )
+    active = await app.config.db.graphs.find(
+        {"manifest.cron": {"$exists": True}}
+    ).to_list(None)
+
+    for graph in active:
+        print(f"Adding graph to scheduler: {graph}")
+        app.config.scheduler.add(graph)
 
 
 @app.after_server_stop
@@ -37,13 +51,38 @@ async def create_graph(request, user):
     graph = request.json
     graph["user"] = user
     graph["id"] = str(uuid4())
-    await app.config.db.graphs.insert_one(graph)
+    if not graph.get("manifest"):
+        graph["manifest"] = {}
+
+    if not graph.get("actions"):
+        return json({"success": False, "error": "No actions provided."})
+
+    if not graph.get("env"):
+        graph["env"] = {}
+
+    print(f"Creating graph: {graph}")
+
+    if graph.get("manifest").get("cron") is not None:
+        await app.config.db.graphs.insert_one(graph)
+        app.config.scheduler.add(graph)
+        print("Added graph to scheduler.")
+
+    else:
+        new_runner = runner.Runner(
+            graph, app.config.redis.pubsub(), app.config.redis, graph.get("user", None)
+        )
+        asyncio.create_task(new_runner.run())
+        print("Started one-time graph.")
+
     return json({"success": True})
 
 
 @app.route("/<user>/graphs/<id>", methods=["DELETE"])
 async def delete_graph(request, user, id):
     await app.config.db.graphs.delete_one({"user": user, "id": id})
+
+    app.config.scheduler.remove(id)
+
     return json({"success": True})
 
 

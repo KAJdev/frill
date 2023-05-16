@@ -37,7 +37,7 @@ async def talk(prompt: str, user: str = None, jobs: list[dict] = []) -> Optional
 
     jobs_str = (
         "\n\n".join(
-            f"{i}. {job.get('manifest', {}).get('name')} ({job.get('manifest', {}).get('cron')})\n{job.get('manifest', {}).get('description')}"
+            f"{i+1}. {job.get('manifest', {}).get('name')}\ncron: {job.get('manifest', {}).get('cron')}\n{job.get('manifest', {}).get('description')}"
             for i, job in enumerate(jobs)
         )
         or "No jobs."

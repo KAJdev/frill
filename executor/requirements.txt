@@ -1,3 +1,6 @@
 motor
 sanic
 redis>=4.2.0rc1
+async-timeout
+apscheduler
+aiohttp
