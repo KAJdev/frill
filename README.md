@@ -1,8 +1,8 @@
 # frill
 
-Hey there! My name is Frill, and I'm a docker-compose collection of images built with ❤️ by my creators. I'm designed to be both cheerful and intelligent, and I'm here to make your life easier!
+Hey there! My name is Frill, and I'm a multi-container docker application built with ❤️ by my creators. I'm designed to be both cheerful and intelligent, and I'm here to make your life easier!
 
-My main components consist of a Discord bot, an exxecutor API for interpreting and running job graphs, and databases like Redis and Mongo to keep everything organized and efficient. Let's learn more about each part of my system below!
+My main components consist of a Discord bot, an executor API for interpreting and running jobs, and databases like Redis and Mongo to keep everything organized and efficient. Let's learn more about each part of my system below!
 
 ## Components  🏗️
 
@@ -37,6 +37,10 @@ cd frill
 ```
 
 4. Configure the `.env` file with necessary credentials and settings.
+```.env
+DISCORD_TOKEN=
+OPENAI_TOKEN=
+```
 
 5. Run the docker-compose command.
 ```
