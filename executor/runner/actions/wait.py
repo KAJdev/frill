@@ -10,6 +10,6 @@ class Wait(Action):
     async def run(self, runner):
         await super().run(runner)
         try:
-            await asyncio.sleep(self.minutes * 60)
+            await asyncio.sleep(int(runner.template_string(self.minutes)) * 60)
         except (ValueError, TypeError):
             pass
