@@ -40,6 +40,7 @@ cd frill
 ```.env
 DISCORD_TOKEN=
 OPENAI_TOKEN=
+TENOR_TOKEN=
 ```
 
 5. Run the docker-compose command.

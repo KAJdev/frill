@@ -1,3 +1,4 @@
+from os import getenv
 from . import Action
 import aiohttp
 
@@ -13,8 +14,18 @@ class Prompt(Action):
     async def run(self, runner):
         await super().run(runner)
 
+        content = runner.template_string(self.content)
+
+        if self.gif:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    f"https://tenor.googleapis.com/v2/search?q={self.gif}&key={getenv('TENOR_TOKEN')}&client_key=frill&limit=1"
+                ) as resp:
+                    json = await resp.json()
+                    content += f"\n\n{json['results'][0]['url']}"
+
         await runner.send_discord_message(
-            content=runner.template_string(self.content),
+            content=content,
         )
 
         if self.output:

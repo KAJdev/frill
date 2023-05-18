@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: mongo:latest
+    restart: unless-stopped
     volumes:
       - frill-db-data:/data/db
     networks:
@@ -12,6 +13,7 @@ services:
 
   redis:
     image: redis:latest
+    restart: unless-stopped
     volumes:
       - frill-redis-data:/data
     networks:
@@ -24,6 +26,7 @@ services:
       context: bot
       dockerfile: Dockerfile
     image: frill-bot:latest
+    restart: unless-stopped
     networks:
       - frill-net
     depends_on:
@@ -43,6 +46,7 @@ services:
       context: executor
       dockerfile: Dockerfile
     image: frill-executor:latest
+    restart: unless-stopped
     networks:
       - frill-net
     depends_on:
@@ -57,6 +61,7 @@ services:
       - PORT=8000
       - PYTHONUNBUFFERED=1
       - OPENAI_TOKEN=${OPENAI_TOKEN}
+      - TENOR_TOKEN=${TENOR_TOKEN}
     ports:
       - 8000:8000
 

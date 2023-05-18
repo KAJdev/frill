@@ -51,6 +51,10 @@ async def create_graph(request, user):
     graph = request.json
     graph["user"] = user
     graph["id"] = str(uuid4())
+
+    graph["last_run"] = None
+    graph["runs"] = 0
+
     if not graph.get("manifest"):
         graph["manifest"] = {}
 
